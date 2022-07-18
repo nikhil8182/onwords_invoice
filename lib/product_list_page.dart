@@ -376,7 +376,6 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
         cancelButton,
       ],
     ));
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
