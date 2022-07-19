@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onwords_invoice/client_details_page.dart';
 import 'package:onwords_invoice/pdf_page.dart';
 import 'package:onwords_invoice/provider_page.dart';
+import 'package:onwords_invoice/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'owner_details_page.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         // home: PdfPage(),
         // home: ClientDetailsPage(),
-        home: OwnerDetailsPage(),
+        home: SplashScreenPage(),
       ),
     );
   }

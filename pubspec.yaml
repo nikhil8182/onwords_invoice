@@ -41,6 +41,7 @@ dependencies:
   provider:
   shared_preferences:
   image_picker:
+  lottie:
 
 dev_dependencies:
   flutter_test:

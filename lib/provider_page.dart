@@ -28,8 +28,8 @@ class TaskData extends ChangeNotifier{
   int get taskCount{
     return _tasks.length;
   }
-  void addTask(String name,String street,String address,String city,String country,int pin) {
-    final task = Customer(name: name, street: street, address: address, city: city, country: country, pin:pin);
+  void addTask(String name,String street,String address,int phone) {
+    final task = Customer(name: name, street: street, address: address,phone:phone);
     _tasks.add(task);
     notifyListeners();
   }

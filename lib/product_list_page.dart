@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onwords_invoice/owner_details_page.dart';
 import 'package:onwords_invoice/pdf_page.dart';
 import 'package:onwords_invoice/provider_page.dart';
 import 'package:onwords_invoice/widget/button_widget.dart';
@@ -26,6 +27,8 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
   TextEditingController vatController = TextEditingController();
   TextEditingController fileName = TextEditingController();
   TextEditingController quotNo = TextEditingController();
+  TextEditingController labAndInstall = TextEditingController();
+  TextEditingController advancePaid = TextEditingController();
   List productName = [];
   List productPrice = [];
   List productQuantity = [];
@@ -34,11 +37,14 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
   String supplierName = " ";
   String supplierStreet = " ";
   String supplierAddress = " ";
-  String supplierCity = " ";
-  String supplierCountry = " ";
-  int supplierPin = 0;
+  int supplierPhone = 0;
+  String supplierEmail = " ";
+  String supplierWebsite = " ";
   String dropdownValue = 'QUOTATION';
   String category = 'GA';
+  int advanceAmt = 0;
+  int labCharge = 0;
+  final _formKey = GlobalKey<FormState>();
 
 
   readData() async {
@@ -47,9 +53,9 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
       supplierName = logData.getString('ownerName')!;
       supplierStreet = logData.getString('ownerStreet')!;
       supplierAddress = logData.getString('ownerAddress')!;
-      supplierCity = logData.getString('ownerCity')!;
-      supplierCountry = logData.getString('ownerCountry')!;
-      supplierPin = logData.getInt('ownerPin')!;
+      supplierWebsite = logData.getString('ownerWebsite')!;
+      supplierEmail = logData.getString('ownerEmail')!;
+      supplierPhone = logData.getInt('ownerPhone')!;
     });
   }
 
@@ -73,6 +79,10 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
             ElevatedButton(onPressed: (){
               showAnotherAlertDialog(context,height,width);
             }, child: const Text(" Add ")),
+            ElevatedButton(onPressed: (){
+              logData.setBool('login', false);
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const OwnerDetailsPage()));
+            }, child: const Text(" LogOut")),
           ],
 
         ),
@@ -101,7 +111,6 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
                     return GestureDetector(
                       onLongPress: (){
                         setState((){
-                          print("hello");
                           productName.removeAt(index);
                           productQuantity.removeAt(index);
                           productVat.removeAt(index);
@@ -157,18 +166,20 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
     Widget okButton = TextButton(
       child: const Text(" ok "),
       onPressed: () {
-        setState((){
-          productName.add(itermNameController.text);
-          productPrice.add(priceController.text);
-          productQuantity.add(quantityController.text);
-          productVat.add(vatController.text);
-        });
-        Provider.of<TaskData>(context,listen: false).addInvoiceListData(itermNameController.text,int.parse(quantityController.text), double.parse(priceController.text));
-        Navigator.pop(context, false);
-        itermNameController.clear();
-        priceController.clear();
-        quantityController.clear();
-        vatController.clear();
+        if(_formKey.currentState!.validate()){
+          setState((){
+            productName.add(itermNameController.text);
+            productPrice.add(priceController.text);
+            productQuantity.add(quantityController.text);
+            productVat.add(vatController.text);
+          });
+          Provider.of<TaskData>(context,listen: false).addInvoiceListData(itermNameController.text,int.parse(quantityController.text), double.parse(priceController.text));
+          Navigator.pop(context, false);
+          itermNameController.clear();
+          priceController.clear();
+          quantityController.clear();
+          vatController.clear();
+        }
       },
     );
     Widget cancelButton = TextButton(
@@ -185,44 +196,57 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
         "  Data entry ",
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
-      content: Container(
-        height: height*0.40,
-        width: width*1.0,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: 'Product name'),
-                  controller: itermNameController,
+      content: Form(
+        key: _formKey,
+        child: Container(
+          height: height*0.40,
+          width: width*1.0,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Product name';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(hintText: 'Product name'),
+                    controller: itermNameController,
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(hintText: 'quantity'),
-                  controller: quantityController,
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter quantity';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(hintText: 'quantity'),
+                    controller: quantityController,
+                  ),
                 ),
-              ),
-
-              // Container(
-              //   padding: EdgeInsets.all(20.0),
-              //   child: TextFormField(
-              //     decoration: InputDecoration(hintText: 'vat'),
-              //     controller: vatController,
-              //   ),
-              // ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(hintText: 'amount'),
-                  controller: priceController,
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter amount';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(hintText: 'amount'),
+                    controller: priceController,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -243,46 +267,45 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
   showFileNameDialog(BuildContext context,task,height,width,taskData) {
     // Create button
     Widget okButton =  ButtonWidget(
-      text: 'Invoice PDF',
+      text: 'GENERATE PDF',
       onClicked: () async {
-        final date = DateTime.now();
-        final dueDate = date.add(Duration(days: 7));
-        final invoice = Invoice(
-          quotNo: int.parse(quotNo.text),
-          fileName: fileName.text,
-          supplier: Supplier(
-            name: supplierName,
-            street: supplierStreet,
-            address: supplierAddress,
-            city: supplierCity,
-            country: supplierCountry,
-            pin: supplierPin,
-          ),
-          customer: Customer(
-              name: task.name,
-              street: task.street,
-              address: task.address,
-              city: task.city,
-              country: task.country,
-              pin: task.pin
-          ),
-          info: InvoiceInfo(
-            date: date,
-            dueDate: dueDate,
-            description: 'Description...',
-            number: '${DateTime.now().year}-9999',
-          ),
-          items: taskData.invoiceListData,
-          docType: dropdownValue, cat: category,
-        );
+    final date = DateTime.now();
+    // final dueDate = date.add(Duration(days: 7));
+    final invoice = Invoice(
+      quotNo: int.parse(quotNo.text),
+      fileName: fileName.text,
+      supplier: Supplier(
+        name: supplierName,
+        street: supplierStreet,
+        address: supplierAddress,
+        phone: supplierPhone,
+        email: supplierEmail,
+        website: supplierWebsite,
+      ),
+      customer: Customer(
+        name: task.name,
+        street: task.street,
+        address: task.address,
+        phone: task.phone,
+      ),
+      info: InvoiceInfo(
+        date: date,
+        // dueDate: dueDate,
+        // description: 'Description...',
+        // number: '${DateTime.now().year}-9999',
+      ),
+      items: taskData.invoiceListData,
+      docType: dropdownValue, cat: category, advancePaid: advanceAmt, labAndInstall: labCharge,
+    );
 
-        final pdfFile = await PdfInvoiceApi.generate(invoice);
+    final pdfFile = await PdfInvoiceApi.generate(invoice);
 
-        PdfApi.openFile(pdfFile).then((value){
-          fileName.clear();
-          quotNo.clear();
-        });
-
+    PdfApi.openFile(pdfFile).then((value){
+      fileName.clear();
+      quotNo.clear();
+      labAndInstall.clear();
+      advancePaid.clear();
+    });
       },
     );
     Widget cancelButton = TextButton(
@@ -367,6 +390,34 @@ class _ProductListOutPageState extends State<ProductListOutPage> {
                   controller: quotNo,
                 ),
               ),
+              dropdownValue=="INVOICE"? Container(
+                padding: const EdgeInsets.all(20.0),
+                child: TextFormField(
+                  onChanged: (val){
+                    setState((){
+                      labCharge = int.parse(val);
+                      print(labCharge);
+                    });
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(hintText: 'Labour and Installation Amount'),
+                  controller: labAndInstall,
+                ),
+              ):Container(),
+              dropdownValue=="INVOICE"? Container(
+                padding: const EdgeInsets.all(20.0),
+                child: TextFormField(
+                  onChanged: (val){
+                      setState(() {
+                        advanceAmt = int.parse(val);
+                        print(advanceAmt);
+                      });
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(hintText: 'Advance Paid'),
+                  controller: advancePaid,
+                ),
+              ):Container(),
             ],
           ),
         ),

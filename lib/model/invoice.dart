@@ -11,6 +11,8 @@ class Invoice {
   final String docType;
   final String cat;
   final int quotNo;
+  final int labAndInstall;
+  final int advancePaid;
 
    Invoice({
     required this.info,
@@ -21,20 +23,22 @@ class Invoice {
     required this.docType,
     required this.cat,
     required this.quotNo,
+    required this.labAndInstall,
+     required this.advancePaid,
   });
 }
 
 class InvoiceInfo {
-  final String description;
-  final String number;
+  // final String description;
+  // final String number;
   final DateTime date;
-  final DateTime dueDate;
+  // final DateTime dueDate;
 
   const InvoiceInfo({
-    required this.description,
-    required this.number,
+    // required this.description,
+    // required this.number,
     required this.date,
-    required this.dueDate,
+    // required this.dueDate,
   });
 }
 

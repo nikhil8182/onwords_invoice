@@ -96,8 +96,7 @@ class PdfInvoiceApi {
       SizedBox(height: 2 * PdfPageFormat.mm),
       Text("${customer.street},"),
       Text("${customer.address},"),
-      Text("${customer.city},"),
-      Text("${customer.country} -${customer.pin}."),
+      Text("Phone: ${customer.phone},"),
     ],
   );
   ///invoiceInfo
@@ -135,8 +134,9 @@ class PdfInvoiceApi {
       SizedBox(height: 2 * PdfPageFormat.mm),
       Text("${supplier.street},"),
       Text("${supplier.address},"),
-      Text("${supplier.city},"),
-      Text("${supplier.country} -${supplier.pin}."),
+      Text("Phone: ${supplier.phone},"),
+      Text("Email: ${supplier.email},"),
+      Text("Website: ${supplier.website}."),
       SizedBox(height: 0.5 * PdfPageFormat.cm),
       Text("GST NO: 33BTUPN5784J1ZT ", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
     ],
@@ -157,7 +157,7 @@ class PdfInvoiceApi {
 
   static Widget buildInvoice(Invoice invoice) {
     final headers = [
-      'Item & Description',
+      ' Item & Description',
       'Quantity',
       'Unit Price',
       'Total'
@@ -215,26 +215,25 @@ class PdfInvoiceApi {
     const vatPercent = 0.09;
     final vat = netTotal * vatPercent;
     final iVat = netTotal * vatPercent;
-    final total = netTotal + vat + iVat;
+    final labAndIns = invoice.labAndInstall;
+    final total = netTotal + vat + iVat + labAndIns;
+    final advanceAmt = invoice.advancePaid;
+    final balanceAmt = total-advanceAmt;
+
 
     return Container(
       alignment: Alignment.centerRight,
       child: Row(
         children: [
           buildBankDetails(),
-          Spacer(flex: 5),
+          Spacer(flex: 3),
           Expanded(
             flex: 4,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 buildText(
                   title: 'Sub total',
-                  value: Utils.formatPrice(netTotal),
-                  unite: true,
-                ),
-                buildText(
-                  title: 'Grand total',
                   value: Utils.formatPrice(netTotal),
                   unite: true,
                 ),
@@ -248,9 +247,25 @@ class PdfInvoiceApi {
                   value: Utils.formatPrice(vat),
                   unite: true,
                 ),
-                Divider(),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                invoice.docType == "INVOICE"?buildText(
+                  title: 'LABOUR & INSTALLATION ',
+                  titleStyle: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  value: Utils.formatPrice(labAndIns.toDouble()),
+                  unite: true,
+                ):Text(""),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                // buildText(
+                //   title: 'Grand total',
+                //   value: Utils.formatPrice(netTotal),
+                //   unite: true,
+                // ),
+                // Divider(),
                 buildText(
-                  title: 'Total amount ',
+                  title: 'Grand total ',
                   titleStyle: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -258,6 +273,27 @@ class PdfInvoiceApi {
                   value: Utils.formatPrice(total),
                   unite: true,
                 ),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                advanceAmt != 0?buildText(
+                  title: 'Advance Paid ',
+                  titleStyle: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  value: Utils.formatPrice(advanceAmt.toDouble()),
+                  unite: true,
+                ):Text(""),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                advanceAmt != 0?buildText(
+                  title: 'Balance Amount',
+                  titleStyle: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  value: Utils.formatPrice(balanceAmt.toDouble()),
+                  unite: true,
+                ):Text(""),
+
                 SizedBox(height: 2 * PdfPageFormat.mm),
                 Container(height: 1, color: PdfColors.grey400),
                 SizedBox(height: 0.5 * PdfPageFormat.mm),
@@ -273,9 +309,12 @@ class PdfInvoiceApi {
   static Widget buildFooter(Invoice invoice) => Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
+      SizedBox(height: 0.5 * PdfPageFormat.cm),
+      invoice.docType == "QUOTATION"?Text("*All Amount mentioned are exclusive of GST, Labour&Installation ",
+          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):Text(""),
       Divider(),
       SizedBox(height: 2 * PdfPageFormat.mm),
-      buildSimpleText(title: 'Address', value: "${invoice.supplier.street},${invoice.supplier.address},${invoice.supplier.city}"),
+      buildSimpleText(title: 'Address', value: "${invoice.supplier.street},${invoice.supplier.address}"),
       SizedBox(height: 1 * PdfPageFormat.mm),
       // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
     ],

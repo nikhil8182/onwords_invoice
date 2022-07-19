@@ -21,11 +21,11 @@ class _OwnerDetailsPageState extends State<OwnerDetailsPage> {
   TextEditingController ownerName = TextEditingController();
   TextEditingController ownerStreet = TextEditingController();
   TextEditingController ownerAddress = TextEditingController();
-  TextEditingController ownerCity = TextEditingController();
-  TextEditingController ownerCountry = TextEditingController();
-  TextEditingController ownerPin = TextEditingController();
+  TextEditingController ownerPhone = TextEditingController();
+  TextEditingController ownerEmail = TextEditingController();
+  TextEditingController ownerWebsite = TextEditingController();
   late SharedPreferences logData;
-
+  final _formKey = GlobalKey<FormState>();
 
 
 
@@ -41,96 +41,127 @@ class _OwnerDetailsPageState extends State<OwnerDetailsPage> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        width: width*1.0,
-        height: height*1.0,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: height*0.08,
-              ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: 'Supplier name'),
-                  controller: ownerName,
+      body: Form(
+        key: _formKey,
+        child: Container(
+          color: Colors.white,
+          width: width*1.0,
+          height: height*1.0,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: height*0.08,
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: 'Supplier Street'),
-                  controller: ownerStreet,
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Company Name';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(hintText: 'Company name'),
+                    controller: ownerName,
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: 'Supplier Address'),
-                  controller: ownerAddress,
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Company Address';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(hintText: 'Company Address'),
+                    controller: ownerStreet,
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: 'Supplier City'),
-                  controller: ownerCity,
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter City & State';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(hintText: 'City & State'),
+                    controller: ownerAddress,
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: 'Supplier Country'),
-                  controller: ownerCountry,
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty || value.length!=10) {
+                        return 'Please enter valid Mobile Number';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.phone,
+                    decoration: const InputDecoration(hintText: 'Phone Number'),
+                    controller: ownerPhone,
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(hintText: 'Supplier pin'),
-                  controller: ownerPin,
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Email';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(hintText: 'Email'),
+                    controller: ownerEmail,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: height*0.08,
-              ),
-              ElevatedButton(
-                  onPressed: () async {
-                    logData = await SharedPreferences.getInstance();
-                    // Provider.of<TaskData>(context,listen: false).addOwnerData(
-                    //     ownerName.text, ownerStreet.text,
-                    //     ownerAddress.text, ownerCity.text, ownerCountry.text);
-                    print("hello");
-                    setState((){
-                      logData.setString('ownerName', ownerName.text);
-                      logData.setString('ownerStreet', ownerStreet.text);
-                      logData.setString('ownerAddress', ownerAddress.text);
-                      logData.setString('ownerCity', ownerCity.text);
-                      logData.setString('ownerCountry', ownerCountry.text);
-                      logData.setInt('ownerPin', int.parse(ownerPin.text));
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Website';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(hintText: 'Website'),
+                    controller: ownerWebsite,
+                  ),
+                ),
+                SizedBox(
+                  height: height*0.08,
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      logData = await SharedPreferences.getInstance();
+                      await logData.clear();
+                        if (_formKey.currentState!.validate()){
+                          setState((){
+                            logData.setBool('login', true);
+                            logData.setString('ownerName', ownerName.text);
+                            logData.setString('ownerStreet', ownerStreet.text);
+                            logData.setString('ownerAddress', ownerAddress.text);
+                            logData.setString('ownerWebsite', ownerWebsite.text);
+                            logData.setString('ownerEmail', ownerEmail.text);
+                            logData.setInt('ownerPhone', int.parse(ownerPhone.text));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const ClientDetailsPage()));
+                          });
 
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const ClientDetailsPage()));
-                    });
+                        }
+                      // Provider.of<TaskData>(context,listen: false).addOwnerData(
+                      //     ownerName.text, ownerStreet.text,
+                      //     ownerAddress.text, ownerCity.text, ownerCountry.text);
 
-                  },
-                  child: Text(" Next ",style: TextStyle(fontSize: height*0.025),)),
-              // ElevatedButton(
-              //     onPressed: (){
-              //       pickImage();
-              //     },
-              //     child: Text(" select ",style: TextStyle(fontSize: height*0.025),)),
-              // image != null? Container(
-              //   height: height*0.20,
-              //   width: width*0.20,
-              //   child: Image.file(
-              //     image!,
-              //     fit: BoxFit.cover,
-              //   ),
-              // ):Container(),
-            ],
+                    },
+                    child: Text(" Next ",style: TextStyle(fontSize: height*0.025),)),
+              ],
+            ),
           ),
         ),
       ),
