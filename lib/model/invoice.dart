@@ -13,6 +13,10 @@ class Invoice {
   final int quotNo;
   final int labAndInstall;
   final int advancePaid;
+  final String accountName;
+  final String accountNumber;
+  final String ifscCode;
+  final String bankName;
 
    Invoice({
     required this.info,
@@ -25,6 +29,10 @@ class Invoice {
     required this.quotNo,
     required this.labAndInstall,
      required this.advancePaid,
+     required this.accountName,
+     required this.accountNumber,
+     required this.ifscCode,
+     required this.bankName,
   });
 }
 
@@ -54,4 +62,14 @@ class InvoiceItem {
     required this.quantity,
     required this.unitPrice,
   });
+}
+
+class SubTotal{
+  final int quantity;
+  final double amount;
+
+  SubTotal({
+    required this.quantity,
+    required this.amount,
+    });
 }

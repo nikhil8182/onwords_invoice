@@ -7,7 +7,10 @@ import 'package:onwords_invoice/model/supplier.dart';
 class TaskData extends ChangeNotifier{
   final List<Customer> _tasks = [ ];
 
+  final List<SubTotal> value = [ ];
+
   final List<InvoiceItem> invoiceListData = [ ];
+
 
   // final List<Supplier> ownerDetails = [ ];
   //
@@ -25,9 +28,15 @@ class TaskData extends ChangeNotifier{
     return UnmodifiableListView(invoiceListData);
   }
 
+  UnmodifiableListView<SubTotal> get subTotalValue {
+    return UnmodifiableListView(value);
+  }
+
   int get taskCount{
     return _tasks.length;
   }
+
+
   void addTask(String name,String street,String address,int phone) {
     final task = Customer(name: name, street: street, address: address,phone:phone);
     _tasks.add(task);
@@ -40,6 +49,12 @@ class TaskData extends ChangeNotifier{
     notifyListeners();
   }
 
+  void addSubTotal(int quantity,double price) {
+    final data = SubTotal(quantity: quantity,amount: price);
+    value.add(data);
+    notifyListeners();
+  }
+  ///subtotal
   // void addOwnerData(String name,String street,String address,String city,String country) {
   //   final ownerData = Supplier(name: name, street: street, address: address, city: city, country: country);
   //   ownerDetails.add(ownerData);
@@ -53,6 +68,11 @@ class TaskData extends ChangeNotifier{
 
   void deleteTask(int ind){
     invoiceListData.removeAt(ind);
+    notifyListeners();
+  }
+
+  void clearSubtotal(int ind){
+    value.removeAt(ind);
     notifyListeners();
   }
 

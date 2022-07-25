@@ -1,19 +1,19 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:onwords_invoice/api/pdf_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
-
+import '../image_saving/user.dart';
 import '../model/customer.dart';
 import '../model/invoice.dart';
 import '../model/supplier.dart';
 import '../utils.dart';
 
 class PdfInvoiceApi {
-  static Future<File> generate(Invoice invoice) async {
+  static Future<File> generate(Invoice invoice,User user) async {
     final pdf = Document();
-    var assetImage = pw.MemoryImage((await rootBundle.load('images/logo.png')).buffer.asUint8List());
+    // var assetImage = pw.MemoryImage((await rootBundle.load(user.imagePath)).buffer.asUint8List());
+    var assetImage = pw.MemoryImage(File(user.imagePath).readAsBytesSync());
 
     pdf.addPage(MultiPage(
       build: (context) => [
@@ -138,7 +138,7 @@ class PdfInvoiceApi {
       Text("Email: ${supplier.email},"),
       Text("Website: ${supplier.website}."),
       SizedBox(height: 0.5 * PdfPageFormat.cm),
-      Text("GST NO: 33BTUPN5784J1ZT ", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
+      Text("GST NO: ${supplier.gst} ", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
     ],
   );
   ///doctype
@@ -196,14 +196,14 @@ class PdfInvoiceApi {
   }
 
 
-  static Widget buildBankDetails()=> Column(
+  static Widget buildBankDetails(Invoice invoice)=> Column(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text("Acc.No: 5020-0065-403656", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
-      Text("Acc.Name: Onwords", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
-      Text("IFSC Code: HDFC0000787", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
-      Text("Bank : HDFC", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
+      Text("Acc.Name: ${invoice.accountName}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
+      Text("Acc.No: ${invoice.accountNumber}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
+      Text("IFSC Code: ${invoice.ifscCode}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
+      Text("Bank : ${invoice.bankName}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
     ]
   );
 
@@ -225,7 +225,7 @@ class PdfInvoiceApi {
       alignment: Alignment.centerRight,
       child: Row(
         children: [
-          buildBankDetails(),
+          buildBankDetails(invoice),
           Spacer(flex: 3),
           Expanded(
             flex: 4,

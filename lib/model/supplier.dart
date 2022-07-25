@@ -5,6 +5,7 @@ class Supplier {
   final int phone;
   final String email;
   final String website;
+  final String gst;
   // final String paymentInfo;
 
   const Supplier({
@@ -14,6 +15,7 @@ class Supplier {
     required this.phone,
     required this.email,
     required this.website,
+    required this.gst,
     // required this.paymentInfo,
   });
 }

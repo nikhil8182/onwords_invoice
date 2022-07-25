@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:onwords_invoice/client_details_page.dart';
+import 'package:onwords_invoice/Screens/Customer_Details_Screen.dart';
+import 'package:onwords_invoice/Screens/intro_Screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'owner_details_page.dart';
 
 
 
@@ -41,11 +41,11 @@ class _SplashScreenPageState extends State<SplashScreenPage> with TickerProvider
     if(isLoggedIn) {
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const ClientDetailsPage()));
+          MaterialPageRoute(builder: (context) => const CustomerDetails()));
     }else{
       Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const OwnerDetailsPage()));
+          MaterialPageRoute(builder: (context) => const IntroScreen()));
     }
 
   }
@@ -62,7 +62,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> with TickerProvider
         width: width*1.0,
         child: Center(
           child: Lottie.asset(
-            'images/splash.json',
+            'images/splash1.json',
             controller: _controller,
             height: MediaQuery.of(context).size.height * 1.0,
             width: width*1.0,
