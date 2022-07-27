@@ -33,6 +33,7 @@ class _AddItermState extends State<AddIterm> {
   int advanceAmt = 0;
   int labCharge = 0;
   double subTotal = 0.0;
+  bool gstNeed = false;
   final formKey = GlobalKey<FormState>();
 
 
@@ -325,7 +326,7 @@ class _AddItermState extends State<AddIterm> {
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-                        height: height * 0.23,
+                        height: height * 0.27,
                         width: width * 0.9,
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.1),
@@ -393,6 +394,24 @@ class _AddItermState extends State<AddIterm> {
                                       );
                                     }).toList(),
                                   ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                   Text("GST Need : ",style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: height * 0.012,
+                                      fontFamily: 'Nexa',
+                                      color: Colors.black),),
+                                  Checkbox(
+                                      value: gstNeed,
+                                      onChanged: (val){
+                                        setState((){
+                                          gstNeed = val!;
+                                        });
+                                      }
+                                  )
                                 ],
                               ),
                               Row(
@@ -577,7 +596,9 @@ class _AddItermState extends State<AddIterm> {
                                          context,
                                          MaterialPageRoute(
                                              builder: (context) => PreviewScreen(doctype: dropdownValue,
-                                               category: category,advanceAmt: advanceAmt,labAndInstall: labCharge,)));
+                                               category: category,advanceAmt: advanceAmt,labAndInstall: labCharge,
+                                              gstValue: gstNeed,
+                                             )));
                                    }
                                  });
                               },

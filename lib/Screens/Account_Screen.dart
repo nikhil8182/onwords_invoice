@@ -171,7 +171,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             },
                             decoration: InputDecoration(
                                 prefixIcon: Image.asset(
-                                  'assets/location.png',
+                                  'assets/mail.png',
                                   scale: 2.5,
                                 ),
                                 // suffixIcon: IconButton(

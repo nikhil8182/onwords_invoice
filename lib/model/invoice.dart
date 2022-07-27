@@ -10,13 +10,14 @@ class Invoice {
   final String fileName;
   final String docType;
   final String cat;
-  final int quotNo;
+  final String quotNo;
   final int labAndInstall;
   final int advancePaid;
   final String accountName;
   final String accountNumber;
   final String ifscCode;
   final String bankName;
+  final bool gstNeed;
 
    Invoice({
     required this.info,
@@ -33,6 +34,7 @@ class Invoice {
      required this.accountNumber,
      required this.ifscCode,
      required this.bankName,
+     required this.gstNeed,
   });
 }
 

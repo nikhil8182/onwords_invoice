@@ -21,8 +21,9 @@ class PreviewScreen extends StatefulWidget {
   final String category;
   final int advanceAmt;
   final int labAndInstall;
+  final bool gstValue;
 
-  const PreviewScreen({Key? key, required this.doctype, required this.category, required this.advanceAmt, required this.labAndInstall}) : super(key: key);
+  const PreviewScreen({Key? key, required this.doctype, required this.category, required this.advanceAmt, required this.labAndInstall, required this.gstValue}) : super(key: key);
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
@@ -150,13 +151,44 @@ class _PreviewScreenState extends State<PreviewScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Date : ${DateFormat("dd.MM.yyyy").format(date)}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: height * 0.012,
-                                fontFamily: 'Nexa',
-                                color: Colors.black),
+                          Column(
+                            children: [
+                              Text(
+                                'Date : ${DateFormat("dd.MM.yyyy").format(date)}',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: height * 0.012,
+                                    fontFamily: 'Nexa',
+                                    color: Colors.black),
+                              ),
+                              Container(
+                                  height: height*0.050,
+                                  width: width*0.25,
+                                  child: TextFormField(
+                                    textInputAction: TextInputAction.next,
+                                    controller: fileName,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter File Name';
+                                      }
+                                      return null;
+                                    },
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: height * 0.012,
+                                      fontFamily: 'Avenir',
+                                    ),
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'File Name',
+                                      hintStyle: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: height * 0.012,
+                                        fontFamily: 'Nexa',
+                                      ),
+                                    ),
+                                  )),
+                            ],
                           ),
                           Column(
                             children: [
@@ -460,7 +492,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 final date = DateTime.now();
                                 // final dueDate = date.add(Duration(days: 7));
                                 final invoice = Invoice(
-                                  quotNo: int.parse(quotNo.text),
+                                  gstNeed: widget.gstValue,
+                                  quotNo: quotNo.text,
                                   fileName: fileName.text,
                                   supplier: Supplier(
                                     gst: supplierGst,

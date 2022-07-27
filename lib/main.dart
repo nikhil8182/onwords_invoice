@@ -6,6 +6,12 @@ import 'package:provider/provider.dart';
 
 import 'Screens/intro_Screen.dart';
 
+
+
+
+//app completed 27.07.2022
+
+
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferences.init();

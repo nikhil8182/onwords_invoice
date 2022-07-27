@@ -92,11 +92,11 @@ class PdfInvoiceApi {
     children: [
       Text("Bill To:", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 20.0)),
       SizedBox(height: 0.5 * PdfPageFormat.cm),
-      Text("${customer.name},", style: TextStyle(fontWeight: FontWeight.bold)),
+      Text("${customer.name}", style: TextStyle(fontWeight: FontWeight.bold)),
       SizedBox(height: 2 * PdfPageFormat.mm),
-      Text("${customer.street},"),
-      Text("${customer.address},"),
-      Text("Phone: ${customer.phone},"),
+      Text(customer.street),
+      Text(customer.address),
+      Text("Phone: ${customer.phone}"),
     ],
   );
   ///invoiceInfo
@@ -130,15 +130,15 @@ class PdfInvoiceApi {
   static Widget buildSupplierAddress(Supplier supplier) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text("${supplier.name},", style: TextStyle(fontWeight: FontWeight.bold)),
+      Text("${supplier.name}", style: TextStyle(fontWeight: FontWeight.bold)),
       SizedBox(height: 2 * PdfPageFormat.mm),
-      Text("${supplier.street},"),
-      Text("${supplier.address},"),
-      Text("Phone: ${supplier.phone},"),
-      Text("Email: ${supplier.email},"),
-      Text("Website: ${supplier.website}."),
+      Text(supplier.street),
+      Text(supplier.address),
+      Text("Phone: ${supplier.phone}"),
+      Text("Email: ${supplier.email}"),
+      Text("Website: ${supplier.website}"),
       SizedBox(height: 0.5 * PdfPageFormat.cm),
-      Text("GST NO: ${supplier.gst} ", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
+      Text("GST NO: ${supplier.gst}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
     ],
   );
   ///doctype
@@ -216,7 +216,8 @@ class PdfInvoiceApi {
     final vat = netTotal * vatPercent;
     final iVat = netTotal * vatPercent;
     final labAndIns = invoice.labAndInstall;
-    final total = netTotal + vat + iVat + labAndIns;
+    // final total = netTotal + vat + iVat + labAndIns;
+    final total = invoice.gstNeed?netTotal + vat + iVat + labAndIns: netTotal+ labAndIns;
     final advanceAmt = invoice.advancePaid;
     final balanceAmt = total-advanceAmt;
 
@@ -237,16 +238,16 @@ class PdfInvoiceApi {
                   value: Utils.formatPrice(netTotal),
                   unite: true,
                 ),
-                buildText(
+                invoice.gstNeed ? buildText(
                   title: 'CGST ${vatPercent * 100} %',
                   value: Utils.formatPrice(vat),
                   unite: true,
-                ),
-                buildText(
+                ):Text(""),
+                invoice.gstNeed ? buildText(
                   title: 'IGST ${vatPercent * 100} %',
                   value: Utils.formatPrice(vat),
                   unite: true,
-                ),
+                ):Text(""),
                 SizedBox(height: 2 * PdfPageFormat.mm),
                 invoice.docType == "INVOICE"?buildText(
                   title: 'LABOUR & INSTALLATION ',
@@ -310,7 +311,8 @@ class PdfInvoiceApi {
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       SizedBox(height: 0.5 * PdfPageFormat.cm),
-      invoice.docType == "QUOTATION"?Text("*All Amount mentioned are exclusive of GST, Labour&Installation ",
+      invoice.docType == "QUOTATION"? invoice.gstNeed ?Text("*All Amount mentioned are exclusive of Labour & Installation ",
+          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):Text ("*All Amount mentioned are exclusive of GST, Labour & Installation ",
           style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):Text(""),
       Divider(),
       SizedBox(height: 2 * PdfPageFormat.mm),
