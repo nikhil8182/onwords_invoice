@@ -9,7 +9,7 @@ import 'Screens/intro_Screen.dart';
 
 
 
-//app completed 27.07.2022
+//app completed 30.07.2022
 
 
 Future<void> main() async{

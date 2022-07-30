@@ -308,7 +308,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                               return Table(
                                 // border: TableBorder.all(),
                                 children: [
-                                  buildRow(['${invoice[index].description}','${invoice[index].quantity}','${invoice[index].unitPrice}',
+                                  buildRow([(invoice[index].description),'${invoice[index].quantity}','${invoice[index].unitPrice}',
                                     '${invoice[index].quantity *invoice[index].unitPrice}']
                                   ),
                                 ],

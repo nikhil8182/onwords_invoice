@@ -16,8 +16,9 @@ class PdfInvoiceApi {
     var assetImage = pw.MemoryImage(File(user.imagePath).readAsBytesSync());
 
     pdf.addPage(MultiPage(
+      header: (context)=> builderLogo(assetImage,invoice.info,invoice),
       build: (context) => [
-        builderLogo(assetImage,invoice.info,invoice),
+        // builderLogo(assetImage,invoice.info,invoice),
         buildHeader(invoice),
         SizedBox(height: 0.8 * PdfPageFormat.cm),
         // buildTitle(invoice),
@@ -35,6 +36,7 @@ class PdfInvoiceApi {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
@@ -173,7 +175,7 @@ class PdfInvoiceApi {
         '${item.unitPrice}',
         // '${0} %',
         // '${item.vat} %',
-        '${total.toStringAsFixed(2)}',
+        (total.toStringAsFixed(2)),
       ];
     }).toList();
 
