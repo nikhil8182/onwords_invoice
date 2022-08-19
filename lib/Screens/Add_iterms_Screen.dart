@@ -211,7 +211,7 @@ class _AddItermState extends State<AddIterm> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width: width * 0.3,
+                              width: width * 0.15,
                               child: TextFormField(
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -220,7 +220,7 @@ class _AddItermState extends State<AddIterm> {
                                 ),
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Product Name',
+                                  hintText: ' Name',
                                   hintStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: height * 0.012,
@@ -236,7 +236,7 @@ class _AddItermState extends State<AddIterm> {
                               thickness: 3,
                             ),
                             SizedBox(
-                              width: width * 0.2,
+                              width: width * 0.16,
                               child: TextFormField(
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -261,7 +261,7 @@ class _AddItermState extends State<AddIterm> {
                               thickness: 3,
                             ),
                             SizedBox(
-                              width: width * 0.2,
+                              width: width * 0.12,
                               child: TextFormField(
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -270,7 +270,7 @@ class _AddItermState extends State<AddIterm> {
                                 ),
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Product Rate',
+                                  hintText: 'Rate',
                                   hintStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: height * 0.012,
@@ -279,7 +279,6 @@ class _AddItermState extends State<AddIterm> {
                                 ),
                               ),
                             ),
-
                           ],
                         ),
                       ),
@@ -296,15 +295,16 @@ class _AddItermState extends State<AddIterm> {
                           itemCount: productName.length,
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
-                              onLongPress: (){
-                                setState((){
-                                  productName.removeAt(index);
-                                  productQuantity.removeAt(index);
-                                  productVat.removeAt(index);
-                                  productPrice.removeAt(index);
-                                  Provider.of<TaskData>(context,listen: false).deleteTask(index);
-                                  Provider.of<TaskData>(context,listen: false).clearSubtotal(index);
-                                });
+                              onTap: (){
+                                // setState((){
+                                //   productName.removeAt(index);
+                                //   productQuantity.removeAt(index);
+                                //   productVat.removeAt(index);
+                                //   productPrice.removeAt(index);
+                                //   Provider.of<TaskData>(context,listen: false).deleteTask(index);
+                                //   Provider.of<TaskData>(context,listen: false).clearSubtotal(index);
+                                // });
+                                showDeleteDialog(context,index);
                               },
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -312,8 +312,7 @@ class _AddItermState extends State<AddIterm> {
                                   // border: TableBorder.all(),
                                   children: [
                                     buildRow([
-                                      '${productName[index]}','${productQuantity[index]}','${productPrice[index]}',]
-                                    ),
+                                      '${productName[index]}','${productQuantity[index]}','${productPrice[index]}',]),
                                   ],
                                 ),
                               ),
@@ -658,6 +657,48 @@ class _AddItermState extends State<AddIterm> {
       },
     ).toList(),
   );
+
+
+  showDeleteDialog(BuildContext context,int index){
+    Widget okButton = TextButton(
+      child: const Text(" ok "),
+      onPressed: () {
+        setState((){
+          productName.removeAt(index);
+          productQuantity.removeAt(index);
+          productVat.removeAt(index);
+          productPrice.removeAt(index);
+          Provider.of<TaskData>(context,listen: false).deleteTask(index);
+          Provider.of<TaskData>(context,listen: false).clearSubtotal(index);
+          Navigator.pop(context, false);
+        });
+      },
+    );
+    Widget cancelButton = TextButton(
+      child: const Text(" Cancel "),
+      onPressed: () {
+        Navigator.pop(context, false);
+      },
+    );
+    // Create AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      content: const Text("Do you want to delete ?"),
+      actions: [
+        cancelButton,
+        okButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 
   showAnotherAlertDialog(BuildContext context,height,width) {
     // Create button
