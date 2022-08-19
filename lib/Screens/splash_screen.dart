@@ -26,7 +26,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> with TickerProvider
      isLoggedIn = logData.getBool('login')??false;
     });
   }
-
+//
   @override
   void initState() {
     readData();
