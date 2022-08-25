@@ -34,6 +34,7 @@ class _AddItermState extends State<AddIterm> {
   int labCharge = 0;
   double subTotal = 0.0;
   bool gstNeed = false;
+  bool labNeed = false;
   final formKey = GlobalKey<FormState>();
 
 
@@ -174,7 +175,7 @@ class _AddItermState extends State<AddIterm> {
                       ),
                       Container(
                         width: width * 0.9,
-                        height: height * 0.08,
+                        height: height * 0.09,
                         decoration: BoxDecoration(
                             color: Colors.black.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(20)),
@@ -385,7 +386,7 @@ class _AddItermState extends State<AddIterm> {
                                         category = newValue!;
                                       });
                                     },
-                                    items: <String>['GA','SH','IT','DL','SS','WTA']
+                                    items: <String>['GA','SH','IT','DL','SS','WTA','AG']
                                         .map<DropdownMenuItem<String>>((String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
@@ -416,13 +417,31 @@ class _AddItermState extends State<AddIterm> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  dropdownValue=="INVOICE"? Text("Labour and installation",
+                                  Text("Labour Need : ",style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: height * 0.012,
+                                      fontFamily: 'Nexa',
+                                      color: Colors.black),),
+                                  Checkbox(
+                                      value: labNeed,
+                                      onChanged: (val){
+                                        setState((){
+                                          labNeed = val!;
+                                        });
+                                      }
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ((dropdownValue=="INVOICE")||(labNeed))? Text("Labour and installation",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: height * 0.012,
                                       fontFamily: 'Nexa',
                                       color: Colors.black),):const Text(""),
-                                  dropdownValue=="INVOICE"? Container(
+                                  ((dropdownValue=="INVOICE")||(labNeed))? Container(
                                     width: width*0.40,
                                     child: TextFormField(
                                       onChanged: (val){
@@ -596,8 +615,15 @@ class _AddItermState extends State<AddIterm> {
                                          MaterialPageRoute(
                                              builder: (context) => PreviewScreen(doctype: dropdownValue,
                                                category: category,advanceAmt: advanceAmt,labAndInstall: labCharge,
-                                              gstValue: gstNeed,
-                                             )));
+                                              gstValue: gstNeed, labValue: labNeed,
+                                             ))).then((value){
+                                               setState(() {
+                                                 labAndInstall.clear();
+                                                 advancePaid.clear();
+                                                 advanceAmt = 0;
+                                                 labCharge = 0;
+                                               });
+                                             });
                                    }
                                  });
                               },

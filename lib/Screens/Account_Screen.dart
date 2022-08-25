@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:onwords_invoice/Screens/Customer_Details_Screen.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../image_saving/user.dart';
 import '../image_saving/user_preference.dart';
+import '../provider_page.dart';
 import 'intro_Screen.dart';
 import 'dart:io';
 
@@ -49,7 +52,6 @@ class _AccountScreenState extends State<AccountScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-
         leading:   GestureDetector(
           child: Image.asset(
             'assets/back arrow.png',
@@ -69,6 +71,37 @@ class _AccountScreenState extends State<AccountScreen> {
               color: Colors.black,
               fontSize: height * 0.015),
         ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                logData.setBool('login', false);
+                logData.clear();
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const IntroScreen()));
+              });
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20.0),
+              width: width * 0.2,
+              height: height * 0.05,
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Logout",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: height * 0.015,
+                        fontFamily: 'Nexa',
+                        color: Colors.black),
+                  ),
+                  Image.asset('assets/sign-out.png',scale: 2.8,)
+                ],
+              ),
+            ),
+          )
+        ],
 
       ),
       backgroundColor: Colors.white,
@@ -186,34 +219,11 @@ class _AccountScreenState extends State<AccountScreen> {
                         ],
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          logData.setBool('login', false);
-                          logData.clear();
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const IntroScreen()));
-                        });
-                      },
-                      child: Container(
-                        width: width * 0.2,
-                        height: height * 0.05,
-
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Logout",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: height * 0.015,
-                                  fontFamily: 'Nexa',
-                                  color: Colors.black),
-                            ),
-                            Image.asset('assets/sign-out.png',scale: 2.8,)
-                          ],
-                        ),
-                      ),
-                    )
+                    ElevatedButton(onPressed: (){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const CustomerDetails()));
+                      Provider.of<TaskData>(context,listen: false).invoiceListData.clear();
+                      Provider.of<TaskData>(context,listen: false).subTotalValue.clear();
+                    }, child: const Text("Generate new Pdf "))
                   ],
                 ),
               )

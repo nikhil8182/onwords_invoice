@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "639575782258",
+    "project_id": "invoice-app-7fd95",
+    "storage_bucket": "invoice-app-7fd95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639575782258:android:7ad470eaa0df2c097963eb",
+        "android_client_info": {
+          "package_name": "com.onwords.onwords_invoice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639575782258-8v1e733jjm1o4oqj49q562hh6eqf8eot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.onwords.onwords_invoice",
+            "certificate_hash": "475f7ff6ae8b397ffe987f2ed9829994d0f9e1a6"
+          }
+        },
+        {
+          "client_id": "639575782258-nou3jpjqgll8qtncd4s4co8lgls3ankc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz-suPnZ7XL-ywxI3XbPR_ML-uyhc8EoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639575782258-nou3jpjqgll8qtncd4s4co8lgls3ankc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

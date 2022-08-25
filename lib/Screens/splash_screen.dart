@@ -62,7 +62,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> with TickerProvider
         width: width*1.0,
         child: Center(
           child: Lottie.asset(
-            'images/splash1.json',
+            'images/Comp 1.json',
             controller: _controller,
             height: MediaQuery.of(context).size.height * 1.0,
             width: width*1.0,

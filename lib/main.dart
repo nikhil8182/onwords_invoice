@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:onwords_invoice/Screens/splash_screen.dart';
 import 'package:onwords_invoice/image_saving/user_preference.dart';
@@ -15,6 +16,7 @@ import 'Screens/intro_Screen.dart';
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferences.init();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

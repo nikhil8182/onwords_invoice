@@ -94,7 +94,7 @@ class PdfInvoiceApi {
     children: [
       Text("Bill To:", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 20.0)),
       SizedBox(height: 0.5 * PdfPageFormat.cm),
-      Text("${customer.name}", style: TextStyle(fontWeight: FontWeight.bold)),
+      Text(customer.name, style: TextStyle(fontWeight: FontWeight.bold)),
       SizedBox(height: 2 * PdfPageFormat.mm),
       Text(customer.street),
       Text(customer.address),
@@ -132,7 +132,7 @@ class PdfInvoiceApi {
   static Widget buildSupplierAddress(Supplier supplier) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text("${supplier.name}", style: TextStyle(fontWeight: FontWeight.bold)),
+      Text(supplier.name, style: TextStyle(fontWeight: FontWeight.bold)),
       SizedBox(height: 2 * PdfPageFormat.mm),
       Text(supplier.street),
       Text(supplier.address),
@@ -251,7 +251,7 @@ class PdfInvoiceApi {
                   unite: true,
                 ):Text(""),
                 SizedBox(height: 2 * PdfPageFormat.mm),
-                invoice.docType == "INVOICE"?buildText(
+                (invoice.docType == "INVOICE")||(invoice.labNeed)?buildText(
                   title: 'LABOUR & INSTALLATION ',
                   titleStyle: TextStyle(
                     fontSize: 12,
@@ -313,9 +313,13 @@ class PdfInvoiceApi {
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       SizedBox(height: 0.5 * PdfPageFormat.cm),
-      invoice.docType == "QUOTATION"? invoice.gstNeed ?Text("*All Amount mentioned are exclusive of Labour & Installation ",
-          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):Text ("*All Amount mentioned are exclusive of GST, Labour & Installation ",
-          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):Text(""),
+      invoice.docType == "QUOTATION"?
+      ((invoice.gstNeed==true)&&(invoice.labNeed == false))?Text("*All Amount mentioned are exclusive of Labour & Installation ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):
+      ((invoice.gstNeed==false)&&(invoice.labNeed == true))?Text ("*All Amount mentioned are exclusive of GST ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):
+      ((invoice.gstNeed==false)&&(invoice.labNeed == false))?Text("*All Amount mentioned are exclusive of GST & Labour & Installation "):Text(""):Text(""),
+      // invoice.docType == "QUOTATION"? invoice.gstNeed ?Text("*All Amount mentioned are exclusive of Labour & Installation ",
+      //     style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):Text ("*All Amount mentioned are exclusive of GST, Labour & Installation ",
+      //     style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):Text(""),
       Divider(),
       SizedBox(height: 2 * PdfPageFormat.mm),
       buildSimpleText(title: 'Address', value: "${invoice.supplier.street},${invoice.supplier.address}"),

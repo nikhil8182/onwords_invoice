@@ -18,6 +18,7 @@ class Invoice {
   final String ifscCode;
   final String bankName;
   final bool gstNeed;
+  final bool labNeed;
 
    Invoice({
     required this.info,
@@ -35,6 +36,7 @@ class Invoice {
      required this.ifscCode,
      required this.bankName,
      required this.gstNeed,
+     required this.labNeed,
   });
 }
 

@@ -1,6 +1,6 @@
-
-
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:onwords_invoice/image_saving/user.dart';
@@ -13,6 +13,7 @@ import '../model/customer.dart';
 import '../model/invoice.dart';
 import '../model/supplier.dart';
 import '../provider_page.dart';
+import '../utils.dart';
 import '../widget/button_widget.dart';
 import 'Account_Screen.dart';
 
@@ -22,8 +23,16 @@ class PreviewScreen extends StatefulWidget {
   final int advanceAmt;
   final int labAndInstall;
   final bool gstValue;
+  final bool labValue;
 
-  const PreviewScreen({Key? key, required this.doctype, required this.category, required this.advanceAmt, required this.labAndInstall, required this.gstValue}) : super(key: key);
+  const PreviewScreen({Key? key,
+    required this.doctype,
+    required this.category,
+    required this.advanceAmt,
+    required this.labAndInstall,
+    required this.gstValue,
+    required this.labValue,
+  }) : super(key: key);
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
@@ -47,7 +56,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
   String supplierWebsite = " ";
   String supplierGst= " ";
   late User user;
+  late DateTime currentPhoneDate;
+  var dataJson;
   final formKey = GlobalKey<FormState>();
+  List quotLength = [];
+  int quotLen = 0;
+  NumberFormat formatter = NumberFormat("000");
 
 
   readData() async {
@@ -68,10 +82,34 @@ class _PreviewScreenState extends State<PreviewScreen> {
     });
   }
 
+  Future<void> fireData() async {
+    final databaseReference = FirebaseDatabase.instance.ref();
+      databaseReference.child('QuotationAndInvoice').once().then((snap) async {
+        try{
+          for (var element in snap.snapshot.children){
+            // print("dataJson ${element.key} ");
+            if(widget.doctype == element.key){
+              // print("dataJson ${widget.doctype} ");
+              for(var elem in element.children){
+                for(var ele in elem.children){
+                  for(var el in ele.children){
+                    quotLength.add(el.key);
+                    // print('lenght ${quotLength.length}');
+                  }
+                }
+              }
+            }
+          }
+        }catch(e){
+          print(e);
+        }
 
+      });
+  }
 
   @override
   void initState() {
+    fireData();
     readData();
     super.initState();
   }
@@ -490,10 +528,14 @@ class _PreviewScreenState extends State<PreviewScreen> {
                               text: 'Save as',
                               onClicked: () async {
                                 final date = DateTime.now();
+                                setState((){
+                                  quotLen = quotLength.length + 1;
+                                });
                                 // final dueDate = date.add(Duration(days: 7));
                                 final invoice = Invoice(
+                                  labNeed: widget.labValue,
                                   gstNeed: widget.gstValue,
-                                  quotNo: quotNo.text,
+                                  quotNo: formatter.format(quotLen),
                                   fileName: fileName.text,
                                   supplier: Supplier(
                                     gst: supplierGst,
@@ -526,21 +568,46 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                   ifscCode: ifsc.text,
                                   bankName: bank.text,
                                 );
-                                 // print(invoice.supplier.runtimeType);
-                                final pdfFile = await PdfInvoiceApi.generate(invoice,user);
 
-                                PdfApi.openFile(pdfFile).then((value){
+
+
+                                currentPhoneDate = DateTime.now();
+                                Timestamp myTimeStamp = Timestamp.fromDate(currentPhoneDate);
+                                final databaseReference = FirebaseDatabase.instance.ref();
+                                final firebaseStorage = FirebaseStorage.instance;
+
+                                final pdfFile = await PdfInvoiceApi.generate(invoice,user);
+                                PdfApi.openFile(pdfFile).then((value) async {
                                   logData.setString('accountNameSaved', accountName.text);
                                   logData.setString('accountNoSaved', accountNo.text);
                                   logData.setString('ifscCodeSaved', ifsc.text);
                                   logData.setString('bankNameSaved', bank.text);
+
+                                  if(widget.doctype == "INVOICE"){
+                                    var snapshot = await firebaseStorage.ref().child('INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}').putFile(pdfFile);
+                                    var downloadUrl = await snapshot.ref.getDownloadURL();
+                                    var da = {
+                                      'TimeStamp': myTimeStamp.millisecondsSinceEpoch,
+                                      'CreatedBy' : "user",
+                                      'invoice_link': downloadUrl,
+                                    };
+                                    databaseReference.child('QuotationAndInvoice').child('INVOICE').child('${Utils.formatYear(date)}').child('${Utils.formatMonth(date)}').child('INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}').set(da);
+                                  }else{
+                                    var snapshot = await firebaseStorage.ref().child('QUOTATION/EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}').putFile(pdfFile);
+                                    var downloadUrl = await snapshot.ref.getDownloadURL();
+                                    var da = {
+                                      'TimeStamp': myTimeStamp.millisecondsSinceEpoch,
+                                      'CreatedBy' : "user",
+                                      'invoice_link': downloadUrl,
+                                    };
+                                    databaseReference.child('QuotationAndInvoice').child('QUOTATION').child('${Utils.formatYear(date)}').child('${Utils.formatMonth(date)}').child('EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}').set(da);
+                                  }
                                   fileName.clear();
                                   quotNo.clear();
                                   // accountName.clear();
                                   // accountNo.clear();
                                   // ifsc.clear();
                                   // bank.clear();
-
                                 });
                               },
                             ),
