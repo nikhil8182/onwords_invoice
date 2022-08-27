@@ -1,4 +1,4 @@
-package com.onwords.onwords_invoice
+package com.onwords.invoice_app
 
 import io.flutter.embedding.android.FlutterActivity
 

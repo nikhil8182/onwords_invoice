@@ -5,8 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../image_saving/user.dart';
 import '../image_saving/user_preference.dart';
 import '../provider_page.dart';
-import 'intro_Screen.dart';
 import 'dart:io';
+
+import 'loginScreen.dart';
 
 
 class AccountScreen extends StatefulWidget {
@@ -77,7 +78,11 @@ class _AccountScreenState extends State<AccountScreen> {
               setState(() {
                 logData.setBool('login', false);
                 logData.clear();
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const IntroScreen()));
+                Provider.of<TaskData>(context,listen: false).invoiceListData.clear();
+                Provider.of<TaskData>(context,listen: false).value.clear();
+                Provider.of<TaskData>(context,listen: false).deleteCustomerDetails(1);
+                auth.signOut();
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginScreenPage()));
               });
             },
             child: Container(
@@ -141,6 +146,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           TextFormField(
+                            readOnly: true,
                             controller: name,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.name,
@@ -152,6 +158,12 @@ class _AccountScreenState extends State<AccountScreen> {
                               }
                             },
                             decoration: InputDecoration(
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                ),
+                                enabledBorder : const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                ),
                                 prefixIcon: Icon(
                                   Icons.account_circle_outlined,
                                   color: Colors.deepOrangeAccent,
@@ -167,6 +179,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     fontFamily: 'Nexa')),
                           ),
                           TextFormField(
+                            readOnly: true,
                             controller: number,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.number,
@@ -178,6 +191,12 @@ class _AccountScreenState extends State<AccountScreen> {
                               }
                             },
                             decoration: InputDecoration(
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                ),
+                                enabledBorder : const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                ),
                                 prefixIcon: Image.asset(
                                   'assets/number.png',
                                   scale: 2.5,
@@ -192,6 +211,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                     fontFamily: 'Nexa')),
                           ),
                           TextFormField(
+                            readOnly: true,
                             controller: email,
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.name,
@@ -203,6 +223,12 @@ class _AccountScreenState extends State<AccountScreen> {
                               }
                             },
                             decoration: InputDecoration(
+                                focusedBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                ),
+                                enabledBorder : const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                ),
                                 prefixIcon: Image.asset(
                                   'assets/mail.png',
                                   scale: 2.5,
@@ -222,7 +248,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     ElevatedButton(onPressed: (){
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const CustomerDetails()));
                       Provider.of<TaskData>(context,listen: false).invoiceListData.clear();
-                      Provider.of<TaskData>(context,listen: false).subTotalValue.clear();
+                      Provider.of<TaskData>(context,listen: false).value.clear();
+                      Provider.of<TaskData>(context,listen: false).deleteCustomerDetails(1);
                     }, child: const Text("Generate new Pdf "))
                   ],
                 ),

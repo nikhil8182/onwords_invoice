@@ -1,42 +1,130 @@
 {
   "project_info": {
-    "project_number": "639575782258",
-    "project_id": "invoice-app-7fd95",
-    "storage_bucket": "invoice-app-7fd95.appspot.com"
+    "project_number": "566962550940",
+    "firebase_url": "https://marketing-data-d141d-default-rtdb.firebaseio.com",
+    "project_id": "marketing-data-d141d",
+    "storage_bucket": "marketing-data-d141d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:639575782258:android:7ad470eaa0df2c097963eb",
+        "mobilesdk_app_id": "1:566962550940:android:0eca75a46d46e9769e5559",
         "android_client_info": {
-          "package_name": "com.onwords.onwords_invoice"
+          "package_name": "com.onwords.admin_console"
         }
       },
       "oauth_client": [
         {
-          "client_id": "639575782258-8v1e733jjm1o4oqj49q562hh6eqf8eot.apps.googleusercontent.com",
+          "client_id": "566962550940-jds9e65jg8gi5gupf9fo5vojrta8npv6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.onwords.onwords_invoice",
-            "certificate_hash": "475f7ff6ae8b397ffe987f2ed9829994d0f9e1a6"
+            "package_name": "com.onwords.admin_console",
+            "certificate_hash": "5e3627be58ebbd5750107e6f459f930dab3e6323"
           }
         },
         {
-          "client_id": "639575782258-nou3jpjqgll8qtncd4s4co8lgls3ankc.apps.googleusercontent.com",
+          "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCz-suPnZ7XL-ywxI3XbPR_ML-uyhc8EoY"
+          "current_key": "AIzaSyCCTeiCYTB_npcWKKxl-Oj0StQLTmaFOaE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "639575782258-nou3jpjqgll8qtncd4s4co8lgls3ankc.apps.googleusercontent.com",
+              "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "566962550940-endjunsltc7nk2a0424qb37ag8efgal5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nikhil.nikhil"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566962550940:android:bf42afa7db9b5ad49e5559",
+        "android_client_info": {
+          "package_name": "com.onwords.invoice_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566962550940-v3oo61t41db751c9944u5tqiq7e3fj5d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.onwords.invoice_app",
+            "certificate_hash": "475f7ff6ae8b397ffe987f2ed9829994d0f9e1a6"
+          }
+        },
+        {
+          "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCTeiCYTB_npcWKKxl-Oj0StQLTmaFOaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "566962550940-endjunsltc7nk2a0424qb37ag8efgal5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nikhil.nikhil"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566962550940:android:3658949ed8ab10809e5559",
+        "android_client_info": {
+          "package_name": "com.onwords.onwords_invoice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCTeiCYTB_npcWKKxl-Oj0StQLTmaFOaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "566962550940-endjunsltc7nk2a0424qb37ag8efgal5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nikhil.nikhil"
+              }
             }
           ]
         }

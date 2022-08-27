@@ -46,7 +46,8 @@ class _AddItermState extends State<AddIterm> {
     final width = MediaQuery.of(context).size.width;
     return Consumer<TaskData>(
       builder: (context, taskData,child) {
-        final task = taskData.tasks[0];
+        print("taskData.tasks ${taskData.tasks.length}");
+        final task = taskData.tasks.length>2 ? taskData.tasks[1]: taskData.tasks[0];
         // final val = taskData.subTotalValue;
         // if(val.isEmpty){
         //   // print("aasswipe");
@@ -105,7 +106,7 @@ class _AddItermState extends State<AddIterm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: height * 0.85,
+                height: height * 0.90,
                 margin: EdgeInsets.symmetric(
                     vertical: height * 0.01, horizontal: width * 0.05),
                 child: SingleChildScrollView(
@@ -154,19 +155,19 @@ class _AddItermState extends State<AddIterm> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'To : ${task.name}',
+                              'To :   ${task.name}',
                               // style: TextStyle(
                               //     fontWeight: FontWeight.bold,
                               //     fontSize: height * 0.012,
                               //     fontFamily: 'Avenir',
                               //     color: Colors.black),
                             ),
-                            IconButton(
-                                onPressed: () {},
-                                icon: Image.asset(
-                                  'assets/etit1.png',
-                                  scale: 3.5,
-                                ))
+                            // IconButton(
+                            //     onPressed: () {},
+                            //     icon: Image.asset(
+                            //       'assets/etit1.png',
+                            //       scale: 3.5,
+                            //     ))
                           ],
                         ),
                       ),

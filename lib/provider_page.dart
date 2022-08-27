@@ -5,7 +5,9 @@ import 'package:onwords_invoice/model/invoice.dart';
 import 'package:onwords_invoice/model/supplier.dart';
 
 class TaskData extends ChangeNotifier{
-  final List<Customer> _tasks = [ ];
+  final List<Customer> customerData = [
+  const Customer(name: " ", street: " ", address: " ",phone: 0)
+  ];
 
   final List<SubTotal> value = [ ];
 
@@ -21,7 +23,7 @@ class TaskData extends ChangeNotifier{
   // }
 
   UnmodifiableListView<Customer> get tasks {
-    return UnmodifiableListView(_tasks);
+    return UnmodifiableListView(customerData);
   }
 
   UnmodifiableListView<InvoiceItem> get invoiceData {
@@ -33,13 +35,14 @@ class TaskData extends ChangeNotifier{
   }
 
   int get taskCount{
-    return _tasks.length;
+    return customerData.length;
   }
+
 
 
   void addTask(String name,String street,String address,int phone) {
     final task = Customer(name: name, street: street, address: address,phone:phone);
-    _tasks.add(task);
+    customerData.add(task);
     notifyListeners();
   }
 
@@ -73,6 +76,11 @@ class TaskData extends ChangeNotifier{
 
   void clearSubtotal(int ind){
     value.removeAt(ind);
+    notifyListeners();
+  }
+
+  void deleteCustomerDetails(int ind){
+    customerData.removeAt(ind);
     notifyListeners();
   }
 

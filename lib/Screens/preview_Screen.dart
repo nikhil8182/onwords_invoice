@@ -16,6 +16,7 @@ import '../provider_page.dart';
 import '../utils.dart';
 import '../widget/button_widget.dart';
 import 'Account_Screen.dart';
+import 'loginScreen.dart';
 
 class PreviewScreen extends StatefulWidget {
   final String doctype;
@@ -121,7 +122,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
     final width = MediaQuery.of(context).size.width;
     return  Consumer<TaskData>(
         builder: (context, taskData,child) {
-          final task = taskData.tasks[0];
+          final task = taskData.tasks.length == 2 ? taskData.tasks[1]: taskData.tasks[0];
           final invoice = taskData.invoiceListData;
           final val = taskData.subTotalValue;
           if(val.isEmpty){
@@ -166,7 +167,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AccountScreen()));
+                              builder: (context) => const AccountScreen()));
                     });
                   },
                 ),
@@ -231,50 +232,51 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           Column(
                             children: [
                               widget.doctype =='INVOICE'?Text(
-                                'INVOICE No :',
+                                '#INVOICE ',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: height * 0.014,
                                     fontFamily: 'Avenir',
                                     color: Colors.black),
                               ):Text(
-                                'QUOTATION No :',
+                                '#QUOTATION ',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: height * 0.014,
                                     fontFamily: 'Avenir',
                                     color: Colors.black),
                               ),
-                              Container(
-                                height: height*0.050,
-                                width: width*0.2,
-                                child: Center(
-                                  child: TextFormField(
-                                    controller: quotNo,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter QUO-INV No';
-                                      }
-                                      return null;
-                                    },
-                                    keyboardType: TextInputType.number,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: height * 0.012,
-                                      fontFamily: 'Avenir',
-                                    ),
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'QUO-INV No',
-                                      hintStyle: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: height * 0.012,
-                                        fontFamily: 'Nexa',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              ///quotationNo
+                              // Container(
+                              //   height: height*0.050,
+                              //   width: width*0.2,
+                              //   child: Center(
+                              //     child: TextFormField(
+                              //       controller: quotNo,
+                              //       validator: (value) {
+                              //         if (value == null || value.isEmpty) {
+                              //           return 'Please enter QUO-INV No';
+                              //         }
+                              //         return null;
+                              //       },
+                              //       keyboardType: TextInputType.number,
+                              //       style: TextStyle(
+                              //         fontWeight: FontWeight.normal,
+                              //         fontSize: height * 0.012,
+                              //         fontFamily: 'Avenir',
+                              //       ),
+                              //       decoration: InputDecoration(
+                              //         border: InputBorder.none,
+                              //         hintText: 'QUO-INV No',
+                              //         hintStyle: TextStyle(
+                              //           fontWeight: FontWeight.bold,
+                              //           fontSize: height * 0.012,
+                              //           fontFamily: 'Nexa',
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ],
@@ -319,6 +321,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           child: Table(
                             children: [
                               buildRow([
+                                's.no',
                                 'Items',
                                 'Qty',
                                 'Rate',
@@ -335,18 +338,19 @@ class _PreviewScreenState extends State<PreviewScreen> {
                         width: width * 0.9,
                         height: height * 0.4,
                         decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.1),
+                          border: Border.all(color: Colors.deepOrange,width: 1.0),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(20)),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 12.0),
+                          padding: const EdgeInsets.symmetric(vertical: 15.0,horizontal: 5.0),
                           child: ListView.builder(
                             shrinkWrap: true,
                             itemCount: invoice.length,
                             itemBuilder: (BuildContext context, int index) {
                               return Table(
-                                // border: TableBorder.all(),
+                                // border: TableBorder.symmetric(inside: BorderSide.none,outside: BorderSide(width: 1.0)),
                                 children: [
-                                  buildRow([(invoice[index].description),'${invoice[index].quantity}','${invoice[index].unitPrice}',
+                                  buildRow(['${index + 1}.',(invoice[index].description),'${invoice[index].quantity}','${invoice[index].unitPrice}',
                                     '${invoice[index].quantity *invoice[index].unitPrice}']
                                   ),
                                 ],
@@ -588,8 +592,9 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     var downloadUrl = await snapshot.ref.getDownloadURL();
                                     var da = {
                                       'TimeStamp': myTimeStamp.millisecondsSinceEpoch,
-                                      'CreatedBy' : "user",
-                                      'invoice_link': downloadUrl,
+                                      'CreatedBy' : auth.currentUser?.email,
+                                      'mobile_number' : task.phone,
+                                      'document_link': downloadUrl,
                                     };
                                     databaseReference.child('QuotationAndInvoice').child('INVOICE').child('${Utils.formatYear(date)}').child('${Utils.formatMonth(date)}').child('INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}').set(da);
                                   }else{
@@ -597,8 +602,9 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     var downloadUrl = await snapshot.ref.getDownloadURL();
                                     var da = {
                                       'TimeStamp': myTimeStamp.millisecondsSinceEpoch,
-                                      'CreatedBy' : "user",
-                                      'invoice_link': downloadUrl,
+                                      'CreatedBy' : auth.currentUser?.email,
+                                      'mobile_number' : task.phone,
+                                      'document_link': downloadUrl,
                                     };
                                     databaseReference.child('QuotationAndInvoice').child('QUOTATION').child('${Utils.formatYear(date)}').child('${Utils.formatMonth(date)}').child('EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}').set(da);
                                   }
