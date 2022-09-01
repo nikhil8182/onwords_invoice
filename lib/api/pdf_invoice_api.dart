@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:onwords_invoice/api/pdf_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -12,8 +13,8 @@ import '../utils.dart';
 class PdfInvoiceApi {
   static Future<File> generate(Invoice invoice,User user) async {
     final pdf = Document();
-    // var assetImage = pw.MemoryImage((await rootBundle.load(user.imagePath)).buffer.asUint8List());
-    var assetImage = pw.MemoryImage(File(user.imagePath).readAsBytesSync());
+    var assetImage = pw.MemoryImage((await rootBundle.load('images/logo.png')).buffer.asUint8List());
+    // var assetImage = pw.MemoryImage(File(user.imagePath).readAsBytesSync());
 
     pdf.addPage(MultiPage(
       header: (context)=> builderLogo(assetImage,invoice.info,invoice),

@@ -6,8 +6,9 @@ import '../image_saving/user.dart';
 import '../image_saving/user_preference.dart';
 import '../provider_page.dart';
 import 'dart:io';
-
 import 'loginScreen.dart';
+
+
 
 
 class AccountScreen extends StatefulWidget {
@@ -117,7 +118,7 @@ class _AccountScreenState extends State<AccountScreen> {
             children: [
               Container(
                 margin: EdgeInsets.only(top: height * 0.09),
-                height: height * 0.7,
+                height: height * 0.8,
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -138,6 +139,14 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: height*0.010,
+                    ),
+                    const Text("edited by"),
+                    SizedBox(
+                      height: height*0.010,
+                    ),
+                    Text("${auth.currentUser?.email}"),
                     Container(
                       margin: EdgeInsets.symmetric(
                           horizontal: width * 0.08,),

@@ -46,8 +46,8 @@ class _AddItermState extends State<AddIterm> {
     final width = MediaQuery.of(context).size.width;
     return Consumer<TaskData>(
       builder: (context, taskData,child) {
-        print("taskData.tasks ${taskData.tasks.length}");
-        final task = taskData.tasks.length>2 ? taskData.tasks[1]: taskData.tasks[0];
+        // print("taskData.tasks ${taskData.tasks.length}");
+        final task = taskData.tasks.length == 2 ? taskData.tasks[1]: taskData.tasks[0];
         // final val = taskData.subTotalValue;
         // if(val.isEmpty){
         //   // print("aasswipe");

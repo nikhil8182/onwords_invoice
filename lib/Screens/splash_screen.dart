@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:onwords_invoice/Screens/Customer_Details_Screen.dart';
-import 'package:onwords_invoice/Screens/intro_Screen.dart';
 import 'package:onwords_invoice/Screens/loginScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

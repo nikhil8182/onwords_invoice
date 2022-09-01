@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:onwords_invoice/Screens/Customer_Details_Screen.dart';
 import 'package:onwords_invoice/Screens/forgot_password_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Company_Details_Screen.dart';
 
 
 FirebaseAuth auth = FirebaseAuth.instance;
@@ -18,6 +19,7 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
   TextEditingController email = TextEditingController();
   TextEditingController pass = TextEditingController();
   bool isHidden = true;
+  late SharedPreferences logData;
 
 
   void _togglePasswordView() {
@@ -146,15 +148,28 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                   padding: MaterialStateProperty.all(EdgeInsets.all(10.0))
                 ),
                   onPressed: () async {
+                    logData = await SharedPreferences.getInstance();
                     try {
-                      await auth.signInWithEmailAndPassword(email: email.text.replaceAll(' ', ''),password: pass.text.replaceAll(' ', ''));
-                      setState(() {
+                      await auth.signInWithEmailAndPassword(email: email.text.replaceAll(' ', ''),password: pass.text.replaceAll(' ', '')).then((value)
+                      {
+                        logData.setBool('login', true);
+                        logData.setString('ownerName', 'Onwords Smart Solutions');
+                        logData.setString('ownerStreet', 'Pollachi');
+                        logData.setString('ownerAddress', 'Coimbatore');
+                        logData.setString('ownerWebsite', 'www.onwords.in');
+                        logData.setString('ownerEmail', 'cs@onwords.in');
+                        logData.setString('ownerGst', '33BTUPN5784J1ZT');
+                        logData.setInt('ownerPhone', int.parse('7708630275'));
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const CompanyDetails()));
+                                const CustomerDetails()));
+
                       });
+
+
+
                     } catch (e) {
                       // print(e);
                       setState(() {
