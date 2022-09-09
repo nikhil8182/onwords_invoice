@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider_page.dart';
@@ -23,6 +22,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
   final customerName = TextEditingController();
   final email = TextEditingController();
   final number = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +180,7 @@ class _CustomerDetailsState extends State<CustomerDetails> {
                     ),
                     GestureDetector(
                       onTap: () {
-                         if (formKey.currentState!.validate()) {
+                        if (formKey.currentState!.validate()) {
                            setState(() {
                              Provider.of<TaskData>(context,listen: false).addTask(
                                  clientName.text,clientStreet.text,

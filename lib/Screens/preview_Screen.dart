@@ -41,6 +41,11 @@ class PreviewScreen extends StatefulWidget {
 
 class _PreviewScreenState extends State<PreviewScreen> {
   double amount = 0.0;
+  double subTotal = 0.0;
+  double gst = 0.0;
+  double grandTotal = 0.0;
+  int advance = 0;
+  int labour = 0;
   final date = DateTime.now();
   late SharedPreferences logData;
   TextEditingController accountName = TextEditingController();
@@ -76,10 +81,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
       supplierEmail = logData.getString('ownerEmail')!;
       supplierGst = logData.getString('ownerGst')!;
       supplierPhone = logData.getInt('ownerPhone')!;
-      accountName.text = logData.getString('accountNameSaved')!;
-      accountNo.text = logData.getString('accountNoSaved')!;
-      ifsc.text = logData.getString('ifscCodeSaved')!;
-      bank.text = logData.getString('bankNameSaved')!;
+      accountName.text = "Onwords";
+      accountNo.text = "5020-0065-403656";
+      ifsc.text = "HDFC0000787";
+      bank.text = "HDFC";
+      labour = widget.labAndInstall;
+      advance = widget.advanceAmt;
     });
   }
 
@@ -129,7 +136,13 @@ class _PreviewScreenState extends State<PreviewScreen> {
             // print("aasswipe");
           }else{
             amount = val.map((e) => e.quantity*e.amount).reduce((value, element) => value + element);
-            // print(subTotal);
+            // print(amount);
+            const vatPercent = 0.09;
+            if(widget.gstValue){
+              gst = vatPercent * amount;
+            }
+
+            grandTotal = amount + labour + (gst*2) - advance;
           }
           return Scaffold(
             appBar: AppBar(
@@ -364,170 +377,170 @@ class _PreviewScreenState extends State<PreviewScreen> {
                         margin: const EdgeInsets.symmetric(vertical: 10.0),
                         width: width * 0.9,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Acc.Name:',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400, fontFamily: 'Nexa',fontSize: height*0.013),
-                                    ),
-                                    SizedBox(
-                                      height: height*0.060,
-                                      width: width*0.4,
-                                      child: Center(
-                                        child: TextFormField(
-                                          textInputAction: TextInputAction.next,
-                                          controller: accountName,
-                                          validator: (value) {
-                                            if (value == null || value.isEmpty) {
-                                              return 'Please enter Acc Name';
-                                            }
-                                            return null;
-                                          },
-                                          keyboardType: TextInputType.multiline,
-                                          minLines: 1,
-                                          maxLines: 4,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: height * 0.012,
-                                            fontFamily: 'Avenir',
-                                          ),
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: ' name',
-                                            hintStyle: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: height * 0.012,
-                                              fontFamily: 'Nexa',
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text('Acc.No: ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400, fontFamily: 'Nexa',fontSize: height*0.013),),
-                                    SizedBox(
-                                      height: height*0.050,
-                                      width: width*0.4,
-                                      child: Center(
-                                        child: TextFormField(
-                                          textInputAction: TextInputAction.next,
-                                          controller: accountNo,
-                                          validator: (value) {
-                                            if (value == null || value.isEmpty) {
-                                              return 'Please enter Acc No';
-                                            }
-                                            return null;
-                                          },
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: height * 0.012,
-                                            fontFamily: 'Avenir',
-                                          ),
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: ' Number',
-                                            hintStyle: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: height * 0.012,
-                                              fontFamily: 'Nexa',
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text('IFSC code: ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400, fontFamily: 'Nexa',fontSize: height*0.013),),
-                                    SizedBox(
-                                      height: height*0.050,
-                                      width: width*0.4,
-                                      child: Center(
-                                        child: TextFormField(
-                                          textInputAction: TextInputAction.next,
-                                          controller: ifsc,
-                                          validator: (value) {
-                                            if (value == null || value.isEmpty) {
-                                              return 'Please enter IFSC code';
-                                            }
-                                            return null;
-                                          },
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: height * 0.012,
-                                            fontFamily: 'Avenir',
-                                          ),
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: ' code',
-                                            hintStyle: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: height * 0.012,
-                                              fontFamily: 'Nexa',
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text('Bank : ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400, fontFamily: 'Nexa',fontSize: height*0.013),),
-                                    SizedBox(
-                                      height: height*0.080,
-                                      width: width*0.4,
-                                      child: Center(
-                                        child: TextFormField(
-                                          textInputAction: TextInputAction.done,
-                                          keyboardType: TextInputType.multiline,
-                                          minLines: 1,
-                                          maxLines: 4,
-                                          controller: bank,
-                                          validator: (value) {
-                                            if (value == null || value.isEmpty) {
-                                              return 'Please enter Bank Name';
-                                            }
-                                            return null;
-                                          },
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: height * 0.012,
-                                            fontFamily: 'Avenir',
-                                          ),
-                                          decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: ' Bank',
-                                            hintStyle: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: height * 0.012,
-                                              fontFamily: 'Nexa',
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-                              ],
-                            ),
+                            // Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Row(
+                            //       children: [
+                            //         Text(
+                            //           'Acc.Name:',
+                            //           style: TextStyle(
+                            //               fontWeight: FontWeight.w400, fontFamily: 'Nexa',fontSize: height*0.013),
+                            //         ),
+                            //         SizedBox(
+                            //           height: height*0.060,
+                            //           width: width*0.4,
+                            //           child: Center(
+                            //             child: TextFormField(
+                            //               textInputAction: TextInputAction.next,
+                            //               controller: accountName,
+                            //               validator: (value) {
+                            //                 if (value == null || value.isEmpty) {
+                            //                   return 'Please enter Acc Name';
+                            //                 }
+                            //                 return null;
+                            //               },
+                            //               keyboardType: TextInputType.multiline,
+                            //               minLines: 1,
+                            //               maxLines: 4,
+                            //               style: TextStyle(
+                            //                 fontWeight: FontWeight.normal,
+                            //                 fontSize: height * 0.012,
+                            //                 fontFamily: 'Avenir',
+                            //               ),
+                            //               decoration: InputDecoration(
+                            //                 border: InputBorder.none,
+                            //                 hintText: ' name',
+                            //                 hintStyle: TextStyle(
+                            //                   fontWeight: FontWeight.bold,
+                            //                   fontSize: height * 0.012,
+                            //                   fontFamily: 'Nexa',
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     Row(
+                            //       children: [
+                            //         Text('Acc.No: ',
+                            //           style: TextStyle(
+                            //               fontWeight: FontWeight.w400, fontFamily: 'Nexa',fontSize: height*0.013),),
+                            //         SizedBox(
+                            //           height: height*0.050,
+                            //           width: width*0.4,
+                            //           child: Center(
+                            //             child: TextFormField(
+                            //               textInputAction: TextInputAction.next,
+                            //               controller: accountNo,
+                            //               validator: (value) {
+                            //                 if (value == null || value.isEmpty) {
+                            //                   return 'Please enter Acc No';
+                            //                 }
+                            //                 return null;
+                            //               },
+                            //               style: TextStyle(
+                            //                 fontWeight: FontWeight.normal,
+                            //                 fontSize: height * 0.012,
+                            //                 fontFamily: 'Avenir',
+                            //               ),
+                            //               decoration: InputDecoration(
+                            //                 border: InputBorder.none,
+                            //                 hintText: ' Number',
+                            //                 hintStyle: TextStyle(
+                            //                   fontWeight: FontWeight.bold,
+                            //                   fontSize: height * 0.012,
+                            //                   fontFamily: 'Nexa',
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     Row(
+                            //       children: [
+                            //         Text('IFSC code: ',
+                            //           style: TextStyle(
+                            //               fontWeight: FontWeight.w400, fontFamily: 'Nexa',fontSize: height*0.013),),
+                            //         SizedBox(
+                            //           height: height*0.050,
+                            //           width: width*0.4,
+                            //           child: Center(
+                            //             child: TextFormField(
+                            //               textInputAction: TextInputAction.next,
+                            //               controller: ifsc,
+                            //               validator: (value) {
+                            //                 if (value == null || value.isEmpty) {
+                            //                   return 'Please enter IFSC code';
+                            //                 }
+                            //                 return null;
+                            //               },
+                            //               style: TextStyle(
+                            //                 fontWeight: FontWeight.normal,
+                            //                 fontSize: height * 0.012,
+                            //                 fontFamily: 'Avenir',
+                            //               ),
+                            //               decoration: InputDecoration(
+                            //                 border: InputBorder.none,
+                            //                 hintText: ' code',
+                            //                 hintStyle: TextStyle(
+                            //                   fontWeight: FontWeight.bold,
+                            //                   fontSize: height * 0.012,
+                            //                   fontFamily: 'Nexa',
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     Row(
+                            //       children: [
+                            //         Text('Bank : ',
+                            //           style: TextStyle(
+                            //               fontWeight: FontWeight.w400, fontFamily: 'Nexa',fontSize: height*0.013),),
+                            //         SizedBox(
+                            //           height: height*0.080,
+                            //           width: width*0.4,
+                            //           child: Center(
+                            //             child: TextFormField(
+                            //               textInputAction: TextInputAction.done,
+                            //               keyboardType: TextInputType.multiline,
+                            //               minLines: 1,
+                            //               maxLines: 4,
+                            //               controller: bank,
+                            //               validator: (value) {
+                            //                 if (value == null || value.isEmpty) {
+                            //                   return 'Please enter Bank Name';
+                            //                 }
+                            //                 return null;
+                            //               },
+                            //               style: TextStyle(
+                            //                 fontWeight: FontWeight.normal,
+                            //                 fontSize: height * 0.012,
+                            //                 fontFamily: 'Avenir',
+                            //               ),
+                            //               decoration: InputDecoration(
+                            //                 border: InputBorder.none,
+                            //                 hintText: ' Bank',
+                            //                 hintStyle: TextStyle(
+                            //                   fontWeight: FontWeight.bold,
+                            //                   fontSize: height * 0.012,
+                            //                   fontFamily: 'Nexa',
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ),
+                            //
+                            //       ],
+                            //     ),
+                            //   ],
+                            // ),
                               ButtonWidget(
                               text: 'Save as',
                               onClicked: () async {
@@ -582,16 +595,19 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
                                 final pdfFile = await PdfInvoiceApi.generate(invoice,user);
                                 PdfApi.openFile(pdfFile).then((value) async {
-                                  logData.setString('accountNameSaved', accountName.text);
-                                  logData.setString('accountNoSaved', accountNo.text);
-                                  logData.setString('ifscCodeSaved', ifsc.text);
-                                  logData.setString('bankNameSaved', bank.text);
-
+                                  // print(task.name);
+                                  // logData.setString('accountNameSaved', accountName.text);
+                                  // logData.setString('accountNoSaved', accountNo.text);
+                                  // logData.setString('ifscCodeSaved', ifsc.text);
+                                  // logData.setString('bankNameSaved', bank.text);
+///
                                   if(widget.doctype == "INVOICE"){
                                     var snapshot = await firebaseStorage.ref().child('INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}').putFile(pdfFile);
                                     var downloadUrl = await snapshot.ref.getDownloadURL();
                                     var da = {
-                                      'TimeStamp': myTimeStamp.millisecondsSinceEpoch,
+                                      'Customer_name': task.name,
+                                      'Status':'Processing',
+                                      'TimeStamp': myTimeStamp.seconds,
                                       'CreatedBy' : auth.currentUser?.email,
                                       'mobile_number' : task.phone,
                                       'document_link': downloadUrl,
@@ -601,13 +617,16 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     var snapshot = await firebaseStorage.ref().child('QUOTATION/EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}').putFile(pdfFile);
                                     var downloadUrl = await snapshot.ref.getDownloadURL();
                                     var da = {
-                                      'TimeStamp': myTimeStamp.millisecondsSinceEpoch,
+                                      'Customer_name': task.name,
+                                      'Status':'Processing',
+                                      'TimeStamp': myTimeStamp.seconds,
                                       'CreatedBy' : auth.currentUser?.email,
                                       'mobile_number' : task.phone,
                                       'document_link': downloadUrl,
                                     };
                                     databaseReference.child('QuotationAndInvoice').child('QUOTATION').child('${Utils.formatYear(date)}').child('${Utils.formatMonth(date)}').child('EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}').set(da);
                                   }
+
                                   fileName.clear();
                                   quotNo.clear();
                                   // accountName.clear();
@@ -617,6 +636,23 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 });
                               },
                             ),
+                            SizedBox(
+                              width: width*0.05,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text("Sub Total :  $amount"),
+                                widget.gstValue?Text("IGST 9% : ${Utils.formatPrice(gst)}"):Text("IGST 9% : ${Utils.formatPrice(0.0)}"),
+                                widget.gstValue?Text("CGST  9% : ${Utils.formatPrice(gst)}"):Text("IGST 9% : ${Utils.formatPrice(0.0)}"),
+                                Text("Labour :        $labour"),
+                                Text("advance :       $advance"),
+                                const Divider(),
+                                Text("Grand Total  : $grandTotal",style: TextStyle(fontWeight: FontWeight.bold),),
+                              ],
+                            )
+
+
                             // GestureDetector(
                             //   onTap: () {
                             //     _addItem(taskData);
